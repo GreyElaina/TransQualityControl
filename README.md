@@ -14,6 +14,7 @@
 
  - python3 main.py --projectDir L:\Project-Trans
  - python3 main.py -D L:\Project-Trans
+ 
 2.你可以通过指定output(缩写:O)来指定json输出到哪里,如:
 
  - python3 main.py --output E:
