@@ -7,10 +7,12 @@ import sys
 import os
 
 if __name__ == '__main__':
+    syslist = sys.argv
+
     def info_w():
-        branch_json = src.branch_error_check.branch_main.branch_check(project_assets)
-        duplicate_json = src.duplicate_key_check.duplicate_main.duplicate_main(project_assets)
-        format_json = src.format_char_check.format_main.format_main(project_assets)
+        branch_json = src.branch_error_check.branch_main.branch_check(PL['Project_assets'])
+        duplicate_json = src.duplicate_key_check.duplicate_main.duplicate_main(PL['Project_assets'])
+        format_json = src.format_char_check.format_main.format_main(PL['Project_assets'])
 
         if(os.path.exists("./branch.json") == True):
             os.remove("./branch.json")
@@ -18,11 +20,11 @@ if __name__ == '__main__':
             os.remove("./duplicate.json")
         if(os.path.exists("./format.json") == True):
             os.remove("./format.json")
-        
         #删除文件
-        branch = open("./branch.json","w")
-        duplicate = open("./duplicate.json","w")
-        formatjson = open("./format.json","w")
+
+        branch = open(PL['OutputPath'] + "/branch.json","w")
+        duplicate = open(PL['OutputPath'] + "/duplicate.json","w")
+        formatjson = open(PL['OutputPath'] + "/format.json","w")
         branch.write(branch_json)
         duplicate.write(duplicate_json)
         formatjson.write(format_json)
@@ -32,17 +34,41 @@ if __name__ == '__main__':
         #写json数据到文件
 
     def setProjectDir(dir):  
-        global project_dir
-        global project_assets
-        project_dir = dir
-        project_assets = project_dir + "/assets"
-        
-    syslist = sys.argv
-    mainsyslist = [["--projectDir",setProjectDir],["-D",setProjectDir]]
+        PL['Project_dir'] = dir
+        PL['Project_assets'] = PL['Project_dir'] + "/assets"
     
+    def setOutputPath(path):
+        PL['OutputPath'] = path
+
+    def IsNeedingDefault():
+        for i in PL:
+            if(PL[i] == ""):
+                PL[i] = DPL[i]
+                print("test" + PL[i])
+
+    mainsyslist = [
+        ["--projectDir",setProjectDir],
+        ["-D",setProjectDir],
+        ["--output",setOutputPath],
+        ["-O",setOutputPath]
+    ]
+    DPL = {
+        "OutputPath" : ".",
+        "Project_dir" : "./project",
+        "Project_assets" : "./project/assets"
+    }
+    #PL = [OutputPath,project_dir,project_assets]
+    PL = {
+        'OutputPath' : '',
+        "Project_dir" : "",
+        "Project_assets" : ''
+    }
+
     for i in range(len(syslist)):
         for ii in range(len(mainsyslist)):
             if (syslist[i] == mainsyslist[ii][0]):
-                #python3 main.py --projectDir ./project
+                #传入参数处理
                 mainsyslist[ii][1](syslist[i + 1])
-                info_w()
+
+    IsNeedingDefault()
+    info_w()
