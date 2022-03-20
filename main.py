@@ -23,13 +23,12 @@ if __name__ == '__main__':
         #删除文件
 
         branch = open(PL['OutputPath'] + "/branch.json","w")
-        duplicate = open(PL['OutputPath'] + "/duplicate.json","w")
-        formatjson = open(PL['OutputPath'] + "/format.json","w")
-        branch.write(branch_json)
-        duplicate.write(duplicate_json)
-        formatjson.write(format_json)
-        branch.close()
-        duplicate.close()
+        with open(PL['OutputPath'] + "/duplicate.json","w") as duplicate:
+            formatjson = open(PL['OutputPath'] + "/format.json","w")
+            branch.write(branch_json)
+            duplicate.write(duplicate_json)
+            formatjson.write(format_json)
+            branch.close()
         formatjson.close()
         #写json数据到文件
 
@@ -42,9 +41,9 @@ if __name__ == '__main__':
 
     def IsNeedingDefault():
         for i in PL:
-            if(PL[i] == ""):
+            if (PL[i] == ""):
                 PL[i] = DPL[i]
-                print("test" + PL[i])
+                print(f"test{PL[i]}")
 
     mainsyslist = [
         ["--projectDir",setProjectDir],

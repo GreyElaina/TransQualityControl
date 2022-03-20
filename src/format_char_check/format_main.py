@@ -49,12 +49,12 @@ class FileFinder:
         pass;
 
     def file_finder(self, assets_path):
-        check_file = []
-        for modid in os.listdir(assets_path):
-            if os.path.isfile('{}/{}/lang/en_us.lang'.format(assets_path, modid)) and os.path.isfile(
-                    '{}/{}/lang/zh_cn.lang'.format(assets_path, modid)):
-                check_file.append(modid)
-        return check_file
+        return [
+            modid
+            for modid in os.listdir(assets_path)
+            if os.path.isfile(f'{assets_path}/{modid}/lang/en_us.lang')
+            and os.path.isfile(f'{assets_path}/{modid}/lang/zh_cn.lang')
+        ]
 
 
 def format_main(path):
@@ -65,8 +65,8 @@ def format_main(path):
     list_total = []
 
     for modid in file_finder.file_finder(path):
-        en_dict = file_reader.lang_to_dict('{}/{}/lang/en_us.lang'.format(path, modid))
-        zh_dict = file_reader.lang_to_dict('{}/{}/lang/zh_cn.lang'.format(path, modid))
+        en_dict = file_reader.lang_to_dict(f'{path}/{modid}/lang/en_us.lang')
+        zh_dict = file_reader.lang_to_dict(f'{path}/{modid}/lang/zh_cn.lang')
         list_total.extend(format_check.format_check(en_dict, zh_dict, modid))
 
     return json.dumps(list_total, ensure_ascii=False)
@@ -80,8 +80,14 @@ if __name__ == '__main__':
     list_total = []
 
     for modid in file_finder.file_finder('../project/assets'):
-        en_dict = file_reader.lang_to_dict('../project/assets/{}/lang/en_us.lang'.format(modid))
-        zh_dict = file_reader.lang_to_dict('../project/assets/{}/lang/zh_cn.lang'.format(modid))
+        en_dict = file_reader.lang_to_dict(
+            f'../project/assets/{modid}/lang/en_us.lang'
+        )
+
+        zh_dict = file_reader.lang_to_dict(
+            f'../project/assets/{modid}/lang/zh_cn.lang'
+        )
+
         list_total.extend(format_check.format_check(en_dict, zh_dict, modid))
 
     print(list_total)

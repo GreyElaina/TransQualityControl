@@ -21,7 +21,7 @@ def dir_main(path):
     finder(path, _list)
     for i in _list:
         if '.lang' in i:
-            format_regex = re.compile('{}/assets/.*?/lang/(.*?)\.lang'.format(path))
+            format_regex = re.compile(f'{path}/assets/.*?/lang/(.*?)\\.lang')
             list_out.extend(format_regex.findall(i))
 
     return json.dumps(list(set(list_out)), ensure_ascii=False)
